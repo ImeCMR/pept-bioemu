@@ -1,0 +1,73 @@
+# pept-bioemu configuration
+# Copy to peptides.yaml and customize paths
+
+project_dir: "/path/to/output"        # Required: base output directory
+conda_env: "bioemu_env"               # Required: conda env name or full path
+
+bioemu:
+  num_samples: 20000
+  batch_size: 8
+
+analysis:
+  rmsd_threshold: 2.0
+  helix_threshold: 0.5
+  anchor_dist_threshold: 4.5
+  phi_psi_tolerance: 30.0
+  rg_threshold: 7.5
+  flexe_threshold: 1.5  # kcal/mol/residue, elastic-network deformation energy vs bound reference
+  # Two-tier composite rule: >= shape_min_pass of {RMSD, helix, Rg, FlexE}
+  # AND >= dock_min_pass of {anchor distance, phi/psi} - see bound_like_classifier.py's
+  # BoundLikeCriteria docstring for the rationale.
+  shape_min_pass: 2
+  dock_min_pass: 1
+  bootstrap_resamples: 1000
+
+peptides:
+  - name: "WT_p53"
+    sequence: "ETFSDLWKLLPEN"
+    bound_pdb: "WT_p53/1YCR.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "PDIQ"
+    sequence: "ETFEHWWSQLLS"
+    bound_pdb: "PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 6, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "PMI"
+    sequence: "TSFAEYWNLLSP"
+    bound_pdb: "PMI/3EQS.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: [1, 11]
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+# Add more peptides here:
+#  - name: "YOUR_PEPTIDE"
+#    sequence: "YOUR_SEQUENCE"
+#    bound_pdb: "PATH/TO/BOUND.PDB"
+#    bound_chain: "X"
+#    anchor_positions: [3, 7, 10]
+#    ref_residue_range: null
+#    pocket_centers:
+#      - [X, Y, Z]
+#      - [X, Y, Z]
+#      - [X, Y, Z]
+#    groove_residues: [...]

@@ -1,0 +1,98 @@
+# Source registry for the pept-bioemu MDM2 benchmark.
+# Every row in measurements.csv points at one of these via source_id.
+#
+# local_file paths are relative to the project root
+# (/orange/alberto.perezant/imesh.ranaweera/projects/7_bioEMU_peptide).
+
+sources:
+
+  lang2021:
+    citation: >-
+      Lang, L.; Perez, A. Binding Ensembles of p53-MDM2 Peptide Inhibitors by
+      Combining Bayesian Inference and Atomistic Simulations.
+      Molecules 2021, 26, 198.
+    doi: 10.3390/molecules26010198
+    local_file: papers/molecules_26_00198_v3.pdf
+    open_access: true
+    role: >-
+      Primary computational benchmark. Same lab, same system, independent
+      method (MELDxMD). Table 1 gives the peptide set, Table 2 gives free-peptide
+      and bound-state cluster populations.
+    key_claim: >-
+      "Peptides that, in their free form, favor helices seem to favor binding
+      (given the same interface residues) by reducing the dG_peptide_conformation."
+      (p.9) -- this is the pept-bioemu hypothesis stated in the group's prior work.
+    caveats:
+      - Uses p53 15-29 (SQETFSDLWKLLPEN), not the 17-29 construct in config/peptides.yaml.
+      - Top-cluster population depends on the clustering epsilon (1.5 A here) and is
+        not the same observable as f_bound. Compare ranks, not absolute values.
+      - ff14SB force field; helical propensity is force-field dependent.
+
+  murray2007:
+    citation: >-
+      Murray, J. K.; Gellman, S. H. Targeting Protein-Protein Interactions:
+      Lessons from p53/MDM2. Biopolymers (Peptide Science) 2007, 88, 657-686.
+    doi: 10.1002/bip.20741
+    local_file: papers/Peptide_Science___2007___Murray___Targeting_protein_protein_interactions__Lessons_from_p53_MDM2.pdf
+    open_access: false
+    role: >-
+      Review. Source of alpha-peptide and miniprotein inhibition data
+      (Figure 3, Table I).
+    caveats:
+      - It is a review; values are secondary. Trace to the primary reference before publishing.
+      - Figure 3 data originate from the Novartis work cited as its ref 46
+        (Garcia-Echeverria et al.). Verify against that paper.
+      - Most of the review covers small molecules, peptoids and beta-peptides,
+        which are out of scope for BioEmu.
+      - IC50 is assay-dependent (ELISA vs FP) and is not directly comparable across assays.
+
+  bioemu2025:
+    citation: >-
+      Lewis, S.; Hempel, T.; Jimenez-Luna, J.; et al. Scalable emulation of
+      protein equilibrium ensembles with generative deep learning.
+      Science 2025.
+    doi: 10.1126/science.adv9817
+    local_file: papers/scienceadv9817.pdf
+    role: >-
+      Method paper for the sampling engine. Use for the model's own reported
+      accuracy envelope and for its stated limitations.
+
+  perez2012_flexe:
+    citation: >-
+      Perez, A.; Yang, Z.; Bahar, I.; Dill, K. A.; MacCallum, J. L.
+      FlexE: Using Elastic Network Models to Compare Models of Protein Structure.
+      J. Chem. Theory Comput. 2012.
+    doi: 10.1021/ct300148f
+    local_file: papers/ct300148f.pdf
+    role: >-
+      Structure-comparison methodology. No binding data. Listed for completeness;
+      relevant if RMSD is replaced with a flexibility-aware similarity measure.
+
+  # ---- Cited but NOT held locally. Obtain before populating the linked rows. ----
+
+  pazgier2009:
+    citation: >-
+      Pazgier, M.; Liu, M.; Zou, G.; et al. Structural basis for high-affinity
+      peptide inhibition of p53 interactions with MDM2 and MDMX.
+      PNAS 2009, 106, 4665-4670.
+    local_file: null
+    role: Primary source for PMI (3EQS) affinity. Needed for M022 / M018.
+
+  phan2010:
+    citation: >-
+      Phan, J.; Li, Z.; Kasprzak, A.; Li, B.; Sebti, S.; Guida, W.;
+      Schonbrunn, E.; Chen, J. Structure-based design of high affinity peptides
+      inhibiting the interaction of p53 with MDM2 and MDMX.
+      J. Biol. Chem. 2010, 285, 2174-2183.
+    local_file: null
+    role: >-
+      Primary source for pDI / pDIQ (3JZS) affinity. Cited as ref 39 in lang2021.
+      Needed for M019.
+
+  kussie1996:
+    citation: >-
+      Kussie, P. H.; Gorina, S.; Marechal, V.; et al. Structure of the MDM2
+      oncoprotein bound to the p53 tumor suppressor transactivation domain.
+      Science 1996, 274, 948.
+    local_file: null
+    role: Origin of 1YCR. Cited as ref 30 in lang2021.

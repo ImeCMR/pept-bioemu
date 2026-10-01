@@ -1,0 +1,23 @@
+measurement_id,peptide_id,quantity,value,value_sign,units,assay,target,source_id,locator,extraction,confidence,status,notes
+M001,p53_15_29,free_md_top_cluster_pct,0.6,=,percent,unrestrained MD (ff14SB),free peptide,lang2021,Table 2 p.4,text,high,curated,Population of the top cluster in free-peptide MD. Proxy for pre-organisation.
+M002,pdiq,free_md_top_cluster_pct,24.0,=,percent,unrestrained MD (ff14SB),free peptide,lang2021,Table 2 p.4,text,high,curated,
+M003,ala1,free_md_top_cluster_pct,1.4,=,percent,unrestrained MD (ff14SB),free peptide,lang2021,Table 2 p.4,text,high,curated,
+M004,ala2,free_md_top_cluster_pct,0.2,=,percent,unrestrained MD (ff14SB),free peptide,lang2021,Table 2 p.4,text,high,curated,
+M005,atsp7041,free_md_top_cluster_pct,69.5,=,percent,unrestrained MD (GAFF staple),free peptide,lang2021,Table 2 p.4,text,high,curated,Not runnable in BioEmu; kept for context only.
+M006,p53_15_29,meld_bound_pop_pep_align_pct,70.6,=,percent,MELDxMD,MDM2 complex,lang2021,Table 2 p.4,text,high,curated,Bound-state population; NOT a free-state quantity.
+M007,pdiq,meld_bound_pop_pep_align_pct,97.6,=,percent,MELDxMD,MDM2 complex,lang2021,Table 2 p.4,text,high,curated,
+M008,ala1,meld_bound_pop_pep_align_pct,54.7,=,percent,MELDxMD,MDM2 complex,lang2021,Table 2 p.4,text,high,curated,
+M009,ala2,meld_bound_pop_pep_align_pct,31.3,=,percent,MELDxMD,MDM2 complex,lang2021,Table 2 p.4,text,high,curated,
+M010,atsp7041,meld_bound_pop_pep_align_pct,97.8,=,percent,MELDxMD,MDM2 complex,lang2021,Table 2 p.4,text,high,curated,
+M011,p53_18_29,IC50,8673,=,nM,competition ELISA,p53/MDM2,murray2007,Figure 3 p.662 (orig. ref 46),figure_read,high,curated,"Read from the structure figure. Cross-checked: text states peptide 2 is 28-fold better than peptide 1; 8673/313 = 27.7."
+M012,nov2,IC50,313,=,nM,competition ELISA,p53/MDM2,murray2007,Figure 3 p.662 (orig. ref 46),figure_read,high,curated,Novartis phage-display peptide. Cross-check as above.
+M013,nov3,IC50,8949,=,nM,competition ELISA,p53/MDM2,murray2007,Figure 3 p.662 (orig. ref 46),figure_read,medium,curated,Truncated form of nov2. Sequence read from the drawn structure; verify against the primary reference before publishing.
+M014,p53_hexa_18_23,IC50,700000,=,nM,competition ELISA,p53/MDM2,murray2007,p.661 body text,text,high,curated,Reported as 700 uM for the Thr18-Trp23 hexapeptide.
+M015,mini59,IC50,3.2,=,uM,fluorescence polarisation,p53/MDM2,murray2007,Table I p.680,figure_read,high,curated,Clean typeset table; low transcription risk.
+M016,mini60,IC50,1.6,=,uM,fluorescence polarisation,p53/MDM2,murray2007,Table I p.680,figure_read,high,curated,
+M017,mini61,IC50,150,>,uM,fluorescence polarisation,p53/MDM2,murray2007,Table I p.680,figure_read,high,curated,"Censored value (greater-than). Must be handled as censored in any correlation, not as 150."
+M018,pmi,Kd,,,nM,,MDM2,pazgier2009,,,,needs_source,"PMI affinity is not in the local PDF set. Primary source: Pazgier et al. PNAS 2009. Do not populate from memory."
+M019,pdiq,Kd,,,nM,,MDM2,phan2010,,,,needs_source,"pDI/pDIQ affinity is not in the local PDF set. Primary source: Phan et al. J Biol Chem 2010, 285, 2174-2183 (the 3JZS paper)."
+M020,p53_17_29,helix_fraction_CD,,,percent,circular dichroism,free peptide,,,,,needs_source,"TIER A gap. Experimental free-state helicity is the single most direct test of the BioEmu ensemble. Needs a CD source."
+M021,pdiq,helix_fraction_CD,,,percent,circular dichroism,free peptide,,,,,needs_source,TIER A gap. See M020.
+M022,pmi,helix_fraction_CD,,,percent,circular dichroism,free peptide,,,,,needs_source,TIER A gap. See M020.

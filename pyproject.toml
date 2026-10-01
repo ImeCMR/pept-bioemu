@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pept-bioemu"
+version = "0.1.0"
+description = "Integrated BioEmu ensemble generation + conformational analysis for peptides"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Imesh Ranaweera", email = "imeshr150@gmail.com"}]
+dependencies = [
+    "mdtraj>=1.9.9",
+    "torch_geometric>=2.4,<2.6",
+    "torch>=1.13,<2.6",
+    "modelcif>=0.7",
+    "bio>=1.5.9",
+    "fire>=0.7.0",
+    "huggingface-hub",
+    "hydra-core",
+    "dm-tree",
+    "stackprinter",
+    "einops",
+    "matplotlib>=3.5.0",
+    "requests",
+    "tqdm",
+    "dm-haiku>=0.0.10,<0.0.12",
+    "ml-collections",
+    "absl-py",
+    "tensorflow-cpu>=2.10,<2.12",
+    "jax>=0.4.0,<0.4.35",
+    # tensorflow-cpu<2.12 only supports numpy<2. ml-dtypes>=0.6 requires numpy>=2,
+    # and unpinned installs of flax/orbax-checkpoint/tensorstore (pulled in
+    # transitively via dm-haiku's optax dependency) drift towards ml-dtypes>=0.6
+    # over time, so both must be pinned together to keep a resolvable set.
+    "pandas",
+    "numpy<2",
+    "ml-dtypes<0.6",
+    "pyyaml",
+    "jinja2",
+    "typer",
+    "rich",
+    "scipy",
+    "openmm",
+]
+
+[project.optional-dependencies]
+cuda = [
+    "jax[cuda12]>=0.4.0,<0.4.35",
+    "nvidia-cuda-nvcc-cu12>=12.8.93",
+]
+dev = ["pytest", "ruff", "black"]
+
+[project.scripts]
+pept-bioemu = "pept_bioemu.__main__:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pept_bioemu*"]
+
+[tool.setuptools.package-data]
+"pept_bioemu" = ["slurm/templates/**/*"]

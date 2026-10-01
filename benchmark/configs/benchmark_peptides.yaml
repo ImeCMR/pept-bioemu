@@ -1,0 +1,109 @@
+# Benchmark additions for pept-bioemu.
+#
+# This file contains ONLY the entries that can be run today: they use the
+# 20 standard amino acids AND have a usable bound reference structure.
+#
+# Usage: merge the `peptides:` blocks below into config/peptides.yaml, or run
+#   pept-bioemu run-all -c benchmark/configs/benchmark_peptides.yaml
+# after checking project_dir and conda_env.
+#
+# Peptides in data/peptides.csv marked `no_structure` (nov2, nov3, mini59-61,
+# app) are deliberately absent -- they need a bound reference or a model first.
+# ATSP-7041 is absent because BioEmu cannot represent its staple or its
+# non-canonical residues.
+
+project_dir: "/orange/alberto.perezant/imesh.ranaweera/projects/7_bioEMU_peptide"
+conda_env: "/orange/alberto.perezant/imesh.ranaweera/projects/7_bioEMU_peptide/pept-bioemu_env"
+
+bioemu:
+  num_samples: 20000
+  batch_size: 8
+
+analysis:
+  rmsd_threshold: 2.0
+  helix_threshold: 0.5
+  anchor_dist_threshold: 4.5
+  phi_psi_tolerance: 30.0
+  rg_threshold: 7.5
+  min_criteria_pass: 3
+  bootstrap_resamples: 1000
+
+peptides:
+
+  # ---------------------------------------------------------------
+  # CORRECTED ENTRY. config/peptides.yaml currently has [3, 6, 10].
+  # In 3JZS the Trp that occupies the Trp pocket is W7 (2.35 A from the
+  # pocket centre); W6 is 8.88 A away. See benchmark/README.md Finding 1.
+  # ---------------------------------------------------------------
+  - name: "PDIQ"
+    sequence: "ETFEHWWSQLLS"
+    bound_pdb: "PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  # ---------------------------------------------------------------
+  # NEGATIVE CONTROLS from Lang & Perez 2021 (Molecules 26, 198), Table 1.
+  #
+  # Both are compared against the p53 conformation in 1YCR, exactly as that
+  # paper did ("For the two control peptides based on poly-ALA, there is no
+  # native structure. We compare it to the p53-MDM2 conformation").
+  #
+  # 1YCR chain B is 13 residues; these controls are 12. ref_residue_range
+  # [1, 12] trims the reference so that positions 1-12 align, which keeps the
+  # anchor triad (3, 7, 10) in register with p53 F19/W23/L26.
+  #
+  # EXPECTED RESULT: dG_conf(Ala2) > dG_conf(Ala1) > dG_conf(PDIQ, PMI).
+  # If either control scores as pre-organised as a real binder, the classifier
+  # is not specific and the thresholds need re-tuning.
+  # ---------------------------------------------------------------
+  - name: "Ala1"
+    sequence: "AAFAAAWAALAA"
+    bound_pdb: "WT_p53/1YCR.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: [1, 12]
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "Ala2"
+    sequence: "AAAAAAAAAAAA"
+    bound_pdb: "WT_p53/1YCR.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: [1, 12]
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  # ---------------------------------------------------------------
+  # Lang & Perez used p53 15-29, two residues longer than the 17-29
+  # construct in config/peptides.yaml. Running both makes the comparison
+  # to their Table 2 like-for-like and measures construct sensitivity.
+  # 1YCR chain B only resolves 17-29, so the reference is the 13-residue
+  # chain and the extra N-terminal SQ is unmatched: the classifier trims
+  # the trajectory to the first 13 CA atoms, which would align S15->E17.
+  # Set ref_residue_range once you decide how to handle the offset;
+  # left null here so the mismatch is explicit rather than silently wrong.
+  # ---------------------------------------------------------------
+  # - name: "WT_p53_15_29"
+  #   sequence: "SQETFSDLWKLLPEN"
+  #   bound_pdb: "WT_p53/1YCR.pdb"
+  #   bound_chain: "B"
+  #   anchor_positions: [5, 9, 12]
+  #   ref_residue_range: null   # <-- NEEDS A DECISION, see above
+  #   pocket_centers:
+  #     - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+  #     - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+  #     - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+  #   groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]

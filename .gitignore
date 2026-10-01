@@ -1,0 +1,13 @@
+# Build artifacts
+build/
+*.egg-info/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# SLURM job logs (run artifacts, not source)
+scripts/logs/
+
+# Editor/OS cruft
+.DS_Store

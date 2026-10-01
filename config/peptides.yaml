@@ -1,0 +1,347 @@
+project_dir: "/orange/alberto.perezant/imesh.ranaweera/projects/7_bioEMU_peptide"
+conda_env: "/orange/alberto.perezant/imesh.ranaweera/projects/7_bioEMU_peptide/pept-bioemu_env"
+
+bioemu:
+  num_samples: 20000
+  batch_size: 8
+
+analysis:
+  rmsd_threshold: 2.0
+  helix_threshold: 0.5
+  anchor_dist_threshold: 4.5
+  phi_psi_tolerance: 30.0
+  rg_threshold: 7.5
+  flexe_threshold: 1.5  # kcal/mol/residue, elastic-network deformation energy vs bound reference
+  # Two-tier composite rule: >= shape_min_pass of {RMSD, helix, Rg, FlexE}
+  # AND >= dock_min_pass of {anchor distance, phi/psi} - see bound_like_classifier.py's
+  # BoundLikeCriteria docstring for the rationale.
+  shape_min_pass: 2
+  dock_min_pass: 1
+  bootstrap_resamples: 1000
+
+peptides:
+  - name: "WT_p53"
+    sequence: "ETFSDLWKLLPEN"
+    bound_pdb: "systems/WT_p53/1YCR.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "PDIQ"
+    sequence: "ETFEHWWSQLLS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    # PDIQ has two adjacent tryptophans (...EHWW...); direct geometric
+    # measurement against 3JZS confirms W7 is the pocket-proximal anchor
+    # (4.38 A), not W6 (8.83 A) - see peptides.yaml at the project root.
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    # Re-derived from 3JZS's own MDM2 chain (see peptides.yaml at the project
+    # root for why 1YCR's pocket centers can't be reused across structures).
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "PMI"
+    sequence: "TSFAEYWNLLSP"
+    bound_pdb: "systems/PMI/3EQS.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: [1, 11]
+    # Re-derived from 3EQS's own MDM2 chain - see PDIQ entry above.
+    pocket_centers:
+      - [-8.27594345681128, 10.124514314300272, 2.364447641769672]
+      - [-10.728318137221553, 3.2042333448478457, -0.8259013971847035]
+      - [-14.027488949113572, -6.097838756332235, -1.6078107792771077]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+  # ---------------------------------------------------------------
+  # Expansion set (2026-09-29): mirrors peptides.yaml at the project root -
+  # 11 additional pDI-family peptides from Phan et al. 2010, J Biol Chem
+  # 285:2174-2183, Table 1. See experimental_affinities.csv for full sourcing
+  # and the root peptides.yaml for the approximate-reference-structure notes.
+  # ---------------------------------------------------------------
+
+  - name: "6W"
+    sequence: "LTFEHWWAQLTS"
+    bound_pdb: "systems/6W/3JZR.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [1.9460856556624404, -16.691088848742254, 7.000194451850232]
+      - [9.100928055296684, -15.891974640860749, 10.913433867093442]
+      - [16.99211507869728, -12.1899875038907, 15.498260410124336]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "pDI"
+    sequence: "LTFEHYWAQLTS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "6S"
+    sequence: "LTFEHSWAQLTS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "1E6N"
+    sequence: "ETFEHNWAQLTS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "6N"
+    sequence: "LTFEHNWAQLTS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "6W9S"
+    sequence: "LTFEHWWASLTS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "6W8S9S"
+    sequence: "LTFEHWWSSLTS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "4T6W"
+    sequence: "LTFTHWWAQLTS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "1E6W"
+    sequence: "ETFEHWWAQLTS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "6W8S"
+    sequence: "LTFEHWWSQLTS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "6W11L"
+    sequence: "LTFEHWWAQLLS"
+    bound_pdb: "systems/PDIQ/3JZS.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-7.093537757768224, 3.775745255861062, -0.6105437143298432]
+      - [-12.464604587298044, 8.196741879034526, -4.660234227805743]
+      - [-20.23501879149293, 13.885644071339911, -6.954869497496917]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  # --- Expansion set (2026-09-30): mirrors root peptides.yaml - see that file's header comment ---
+
+  - name: "PMI-L10A"
+    sequence: "TSFAEYWNLASP"
+    bound_pdb: "systems/PMI/3EQS.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: [1, 11]
+    pocket_centers:
+      - [-8.27594345681128, 10.124514314300272, 2.364447641769672]
+      - [-10.728318137221553, 3.2042333448478457, -0.8259013971847035]
+      - [-14.027488949113572, -6.097838756332235, -1.6078107792771077]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "PMI-M2"
+    sequence: "LTFLEYWAQAMQ"
+    bound_pdb: "systems/PMI/3EQS.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: [1, 11]
+    pocket_centers:
+      - [-8.27594345681128, 10.124514314300272, 2.364447641769672]
+      - [-10.728318137221553, 3.2042333448478457, -0.8259013971847035]
+      - [-14.027488949113572, -6.097838756332235, -1.6078107792771077]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "PMI-M3"
+    sequence: "LTFLEYWAQLMQ"
+    bound_pdb: "systems/PMI_M3/5UMM.pdb"
+    bound_chain: "1"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-35.06243173939205, 0.5502549334464323, 36.37158808261987]
+      - [-29.144480392757316, 2.410730809544617, 41.37054978727068]
+      - [-20.05955423553345, 2.9804491520647987, 45.104004496945684]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "PMI-M4"
+    sequence: "LTFLEYWNLASP"
+    bound_pdb: "systems/PMI/3EQS.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: [1, 11]
+    pocket_centers:
+      - [-8.27594345681128, 10.124514314300272, 2.364447641769672]
+      - [-10.728318137221553, 3.2042333448478457, -0.8259013971847035]
+      - [-14.027488949113572, -6.097838756332235, -1.6078107792771077]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "PMI-M5"
+    sequence: "TSFAEYWAQAMQ"
+    bound_pdb: "systems/PMI/3EQS.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: [1, 11]
+    pocket_centers:
+      - [-8.27594345681128, 10.124514314300272, 2.364447641769672]
+      - [-10.728318137221553, 3.2042333448478457, -0.8259013971847035]
+      - [-14.027488949113572, -6.097838756332235, -1.6078107792771077]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "PMI-N8A"
+    sequence: "TSFAEYWALLSP"
+    bound_pdb: "systems/PMI/3EQS.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: [1, 11]
+    pocket_centers:
+      - [-8.27594345681128, 10.124514314300272, 2.364447641769672]
+      - [-10.728318137221553, 3.2042333448478457, -0.8259013971847035]
+      - [-14.027488949113572, -6.097838756332235, -1.6078107792771077]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "p53-E18"
+    sequence: "EEFSDLWKLLPEN"
+    bound_pdb: "systems/WT_p53/1YCR.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "p53-D20"
+    sequence: "ETFDDLWKLLPEN"
+    bound_pdb: "systems/WT_p53/1YCR.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "p53-D18"
+    sequence: "EDFSDLWKLLPEN"
+    bound_pdb: "systems/WT_p53/1YCR.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "p53-E18-D20"
+    sequence: "EEFDDLWKLLPEN"
+    bound_pdb: "systems/WT_p53/1YCR.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "p53-D18-D20"
+    sequence: "EDFDDLWKLLPEN"
+    bound_pdb: "systems/WT_p53/1YCR.pdb"
+    bound_chain: "B"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [36.56579596384197, -24.743598077939435, -8.892332771258308]
+      - [31.46058590044369, -20.16769951259798, -4.773537176998098]
+      - [23.46848450765128, -17.75411151772005, 1.2814719984329996]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
+
+  - name: "MIP"
+    sequence: "PRFWEYWLRLME"
+    bound_pdb: "systems/MIP/2RUH_split.pdb"
+    bound_chain: "0"
+    anchor_positions: [3, 7, 10]
+    ref_residue_range: null
+    pocket_centers:
+      - [-3.4518364800693946, 1.2849795083879498, 10.919583720824297]
+      - [-2.1151544474513666, -0.7790249589386995, 3.302024132769996]
+      - [-2.6749079235775315, -6.74720758532272, -4.651163279110796]
+    groove_residues: [53, 54, 58, 60, 62, 65, 67, 69, 73, 74, 75, 91, 92, 93, 100, 101]
